@@ -9,7 +9,7 @@ The requirement of the challenge Lyrics Alignment (Zalo AI Challenge 2022) is to
 
 Evaluating metrics: Intersection over Union (IoU)
 
-Participating in the competition was part of our final examination for the subject "Deep learning for data science" taught by Dr. Nguyen Tien Huy.
+Participating in the competition was part of our final examination for the subject "Deep learning for data science" supervised by Dr. Nguyen Tien Huy.
 
 ![](assets/iou.png)
 
@@ -32,17 +32,19 @@ Training details (such as hyperparameters) can be found in the `train/3-train.ip
 5. Feed the test audio into the ASR model
 6. Feed the confidence matrix (output of the ASR model) and the test lyrics into the forced alignment algorithm to obtain token-wise alignment.
 
-**More details to the inference process**
+**More details about the inference process**
 
 The output of the ASR model is a frame-wise confidence matrix. Each column represents an audio frame, and each row is the probability that the audio sampled at this frame pronounces the corresponding sound in the alphabet. We would finally use a language model in a typical ASR model to decode the matrix into a meaningful sentence. But since the objective of this problem is to align the text to the audio (the transcript is already available), we just need the matrix without doing any decoding.
 
 The provided lyrics in the test set have been split sentence-wise by default. But to feed them into the forced alignment algorithm, we have to concatenate and normalize the text. After feeding the confidence matrix and the normalized transcript to the forced alignment algorithm, we should get the alignment of every token in the song.
 
+![](assets/inference.jpg)
+
 Finally, we re-split the tokens into their corresponding original sentences, recover the original casing, and adjust the alignment time to continuous. 
 
 ![](assets/postprocess.jpg)
 
-Continous timing adjustment is one of the key points to get better IoU score. We observed an increase by 8% in IoU on the public test set after applying the adjustment.
+Continous timing adjustment is one of the key points to get better IoU score. We observed an increase by 8% in IoU on the public test set after applying the method.
 
 ## Results 
 - Public test set: 0.38285
